@@ -22,7 +22,8 @@ The project also includes a *Verilog testbench* for functional simulation and ve
 ### 📊 Simulation Waveform
 
 ![Asynchronous FIFO Simulation Waveform](async_simulated.png)
-(simulated ouput with testbench.png)
+### 📊 with testbench waveform
+![Asynchronous FIFO testbench Waveform](async_simulated_testbench.png)
 
 ## 🏗️ Architecture
 
