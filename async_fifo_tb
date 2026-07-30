@@ -1,0 +1,142 @@
+module async_fifo_tb;
+
+
+parameter DATA_WIDTH = 8;
+
+
+// Clock signals
+reg wr_clk;
+reg rd_clk;
+
+reg reset;
+
+reg wr_en;
+reg rd_en;
+
+reg [DATA_WIDTH-1:0] data_in;
+
+wire [DATA_WIDTH-1:0] data_out;
+
+wire full;
+wire empty;
+
+
+
+// DUT Instance
+
+async_fifo DUT
+(
+.wr_clk(wr_clk),
+.rd_clk(rd_clk),
+.reset(reset),
+
+.wr_en(wr_en),
+.rd_en(rd_en),
+
+.data_in(data_in),
+.data_out(data_out),
+
+.full(full),
+.empty(empty)
+);
+
+
+
+
+// Write clock 10ns
+
+initial
+begin
+    wr_clk = 0;
+
+    forever #5 wr_clk = ~wr_clk;
+end
+
+
+
+// Read clock 14ns
+
+initial
+begin
+    rd_clk = 0;
+
+    forever #7 rd_clk = ~rd_clk;
+end
+
+
+
+
+// Test sequence
+
+initial
+begin
+
+reset = 1;
+wr_en = 0;
+rd_en = 0;
+data_in = 0;
+
+
+#20;
+
+reset = 0;
+
+
+// Write data
+
+repeat(10)
+begin
+
+@(posedge wr_clk);
+
+wr_en = 1;
+
+data_in = data_in + 1;
+
+end
+
+
+wr_en = 0;
+
+
+// Read data
+
+repeat(10)
+
+begin
+
+@(posedge rd_clk);
+
+rd_en = 1;
+
+end
+
+
+rd_en = 0;
+
+
+
+#100;
+
+$finish;
+
+end
+
+
+
+// Monitor output
+
+initial
+begin
+
+$monitor("Time=%0t Data_in=%h Data_out=%h FULL=%b EMPTY=%b",
+$time,
+data_in,
+data_out,
+full,
+empty);
+
+end
+
+
+endmodule
